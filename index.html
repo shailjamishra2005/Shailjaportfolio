@@ -228,7 +228,7 @@ footer { background: var(--ink-90); padding: 28px 80px; border-top: 1px solid rg
   <div class="hero-watermark" aria-hidden="true">S.</div>
   <div class="hero-left">
     <p class="hero-eyebrow">Portfolio · 2025</p>
-    <h1 class="hero-name" id="heroName" aria-label="Shailja"></h1>
+    <h1 class="hero-name" aria-label="Shailja"><span class="letter" style="animation-delay:.50s">S</span><span class="letter" style="animation-delay:.58s">h</span><span class="letter" style="animation-delay:.66s">a</span><span class="letter" style="animation-delay:.74s">i</span><span class="letter" style="animation-delay:.82s">l</span><span class="letter" style="animation-delay:.90s">j</span><span class="letter amber" style="animation-delay:.98s">a</span></h1>
     <p class="hero-tagline">Marketing thinker. Brand storyteller. Occasional overthinker.</p>
     <div class="hero-rule"></div>
     <div class="hero-scroll-cue"><div class="scroll-line"></div><span>Scroll to explore</span></div>
@@ -459,15 +459,7 @@ document.addEventListener('click', e => {
   }
 });
 
-const name = 'Shailja';
-const heroName = document.getElementById('heroName');
-name.split('').forEach((ch, i) => {
-  const span = document.createElement('span');
-  span.className = 'letter' + (i === name.length - 1 ? ' amber' : '');
-  span.textContent = ch;
-  span.style.animationDelay = (.5 + i * .08) + 's';
-  heroName.appendChild(span);
-});
+// HERO NAME already in HTML
 
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => nav.classList.toggle('stuck', scrollY > 60), { passive: true });
