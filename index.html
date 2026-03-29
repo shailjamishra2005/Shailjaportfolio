@@ -26,8 +26,9 @@
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { font-family: var(--sans); background: var(--paper); color: var(--ink); overflow-x: hidden; cursor: none; }
-a { color: inherit; text-decoration: none; }
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); overflow-x: hidden; cursor: auto; }
+a { color: inherit; text-decoration: none; cursor: none; }
+.pcard-top { cursor: pointer; }
 
 /* CURSOR */
 #cur { position: fixed; z-index: 9999; pointer-events: none; top: 0; left: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--amber); transform: translate(-50%,-50%); transition: width .35s var(--ease), height .35s var(--ease), background .3s; mix-blend-mode: multiply; }
@@ -430,6 +431,7 @@ let mx = 0, my = 0, rx = 0, ry = 0;
 document.addEventListener('mousemove', e => {
   mx = e.clientX; my = e.clientY;
   cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+  document.body.style.cursor = 'none';
 });
 (function animRing() {
   rx += (mx - rx) * .11; ry += (my - ry) * .11;
