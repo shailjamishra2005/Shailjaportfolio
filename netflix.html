@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netflix Pricing Strategy · Shailja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red:     #E50914;
+  --red-mid: #B20710;
+  --red-dim: rgba(229,9,20,0.12);
+  --black:   #000000;
+  --dark:    #141414;
+  --mid:     #221f1f;
+  --white:   #FFFFFF;
+  --gray:    #a3a3a3;
+  --serif:   'Cormorant Garamond', Georgia, serif;
+  --sans:    'Instrument Sans', system-ui, sans-serif;
+  --ease:    cubic-bezier(0.16,1,0.3,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  cursor: none;
+}
+a { color: inherit; text-decoration: none; }
+
+/* CURSOR */
+#cur {
+  position: fixed; z-index: 9999; pointer-events: none;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--red); top: 0; left: 0;
+  transform: translate(-50%,-50%);
+  transition: width .3s var(--ease), height .3s var(--ease);
+  mix-blend-mode: screen;
+}
+#cur.big { width: 56px; height: 56px; background: var(--red); opacity: .25; }
+#cur-ring {
+  position: fixed; z-index: 9998; pointer-events: none;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(229,9,20,.5);
+  top: 0; left: 0; transform: translate(-50%,-50%);
+}
+
+/* BACK LINK */
+.back {
+  position: fixed; top: 28px; left: 40px; z-index: 200;
+  font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.45); display: flex; align-items: center; gap: 8px;
+  transition: color .2s;
+}
+.back:hover { color: var(--white); }
+.back-arrow { font-size: 1rem; transition: transform .3s; }
+.back:hover .back-arrow { transform: translateX(-4px); }
+
+/* THE BIG N BACKGROUND */
+.n-bg {
+  position: fixed; top: 0; right: -5vw;
+  font-family: 'Arial Black', 'Arial', sans-serif;
+  font-size: clamp(60vw, 80vw, 90vw);
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(229,9,20,0.07);
+  pointer-events: none; user-select: none;
+  z-index: 0;
+  letter-spacing: -0.05em;
+}
+
+/* red glow */
+.red-glow {
+  position: fixed; width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(229,9,20,.18) 0%, transparent 70%);
+  top: -100px; left: -100px; pointer-events: none; z-index: 0;
+  animation: glowPulse 4s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%,100% { transform: scale(1); opacity: .7; }
+  50%      { transform: scale(1.3); opacity: 1; }
+}
+
+/* HERO */
+#hero {
+  min-height: 100vh; position: relative; z-index: 1;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 80px 80px;
+  background: linear-gradient(to right, rgba(0,0,0,.95) 40%, rgba(0,0,0,.6) 70%, transparent);
+}
+.hero-meta {
+  font-size: .65rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 20px;
+  opacity: 0; animation: fadeUp .8s var(--ease) .3s forwards;
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 7vw, 7rem);
+  font-weight: 300; line-height: .95; letter-spacing: -.02em;
+  max-width: 700px;
+  opacity: 0; animation: fadeUp 1s var(--ease) .5s forwards;
+}
+.hero-title em { font-style: italic; color: var(--red); }
+.hero-subtitle {
+  font-size: 1.05rem; color: rgba(255,255,255,.55);
+  max-width: 520px; line-height: 1.75; margin-top: 24px;
+  opacity: 0; animation: fadeUp .9s var(--ease) .8s forwards;
+}
+.hero-tags {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-top: 32px;
+  opacity: 0; animation: fadeUp .8s var(--ease) 1s forwards;
+}
+.htag {
+  padding: 5px 14px; border: 1px solid rgba(229,9,20,.4);
+  font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+}
+
+/* CONTENT */
+.content { position: relative; z-index: 1; padding: 100px 80px; }
+.content-grid {
+  display: grid; grid-template-columns: 1fr 2fr; gap: 80px;
+  max-width: 1200px; margin: 0 auto;
+}
+.sidebar { position: sticky; top: 100px; }
+.sidebar-label {
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 20px; display: block;
+}
+.sidebar-item {
+  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.07);
+  font-size: .85rem; color: rgba(255,255,255,.45); line-height: 1.5;
+}
+.sidebar-item strong { display: block; color: var(--white); font-weight: 400; margin-bottom: 2px; }
+
+.main-content {}
+.section-block { margin-bottom: 72px; }
+.block-label {
+  font-size: .62rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.block-label::before { content:''; width: 24px; height: 1px; background: var(--red); }
+.block-heading {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-weight: 300; line-height: 1.15; margin-bottom: 24px;
+}
+.block-heading em { font-style: italic; color: var(--red); }
+.block-body {
+  font-size: .98rem; line-height: 1.9; color: rgba(255,255,255,.6);
+  max-width: 600px; margin-bottom: 20px;
+}
+.block-body strong { color: var(--white); font-weight: 500; }
+
+/* insight cards */
+.insights { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 32px; }
+.insight-card {
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);
+  padding: 28px; transition: background .3s, border-color .3s;
+}
+.insight-card:hover { background: var(--red-dim); border-color: rgba(229,9,20,.3); }
+.ic-num {
+  font-family: var(--serif); font-size: 2rem; font-weight: 300;
+  color: var(--red); line-height: 1; margin-bottom: 10px;
+}
+.ic-title { font-size: .85rem; font-weight: 500; color: var(--white); margin-bottom: 6px; }
+.ic-body { font-size: .8rem; line-height: 1.7; color: rgba(255,255,255,.45); }
+
+/* tier comparison */
+.tiers { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 32px; }
+.tier-card {
+  padding: 28px 24px; border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.02); position: relative; overflow: hidden;
+}
+.tier-card.featured { border-color: var(--red); background: rgba(229,9,20,.07); }
+.tier-card.featured::before {
+  content: 'Focus'; position: absolute; top: 12px; right: 12px;
+  font-size: .55rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--red); border: 1px solid rgba(229,9,20,.4); padding: 3px 8px;
+}
+.tier-name { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--red); margin-bottom: 8px; }
+.tier-price { font-family: var(--serif); font-size: 2rem; font-weight: 300; color: var(--white); margin-bottom: 12px; }
+.tier-desc { font-size: .78rem; color: rgba(255,255,255,.4); line-height: 1.6; }
+
+/* pull quote */
+.pull-quote {
+  border-left: 2px solid var(--red); padding: 20px 0 20px 28px;
+  margin: 48px 0;
+  font-family: var(--serif); font-size: 1.5rem; font-style: italic;
+  font-weight: 300; line-height: 1.4; color: var(--white);
+}
+
+/* takeaway */
+.takeaway {
+  background: var(--dark); border: 1px solid rgba(229,9,20,.25);
+  padding: 40px; margin-top: 48px;
+}
+.takeaway-label { font-size: .62rem; letter-spacing: .2em; text-transform: uppercase; color: var(--red); margin-bottom: 16px; }
+.takeaway-text { font-family: var(--serif); font-size: 1.3rem; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,.8); }
+
+/* nav footer */
+.page-nav {
+  position: relative; z-index: 1;
+  border-top: 1px solid rgba(255,255,255,.07);
+  padding: 48px 80px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.pn-label { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.25); margin-bottom: 8px; }
+.pn-title { font-family: var(--serif); font-size: 1.3rem; color: rgba(255,255,255,.6); transition: color .2s; }
+.pn-link:hover .pn-title { color: var(--white); }
+
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+.reveal { opacity:0; transform:translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+.reveal.on { opacity:1; transform:translateY(0); }
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+@media(max-width:900px){
+  #hero { padding: 0 24px 60px; }
+  .content { padding: 60px 24px; }
+  .content-grid { grid-template-columns: 1fr; gap: 40px; }
+  .sidebar { position: static; }
+  .insights, .tiers { grid-template-columns: 1fr; }
+  .page-nav { padding: 40px 24px; flex-direction: column; gap: 28px; align-items: flex-start; }
+  .back { left: 24px; }
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<a href="shailja-portfolio-v2.html" class="back"><span class="back-arrow">←</span> Back</a>
+
+<div class="n-bg" aria-hidden="true">N</div>
+<div class="red-glow"></div>
+
+<section id="hero">
+  <p class="hero-meta">Case Study · Brand Strategy · Consumer Marketing</p>
+  <h1 class="hero-title">Netflix Pricing <em>Strategy</em></h1>
+  <p class="hero-subtitle">How one of the world's most studied subscription businesses uses price discrimination to serve every kind of viewer while protecting its bottom line.</p>
+  <div class="hero-tags">
+    <span class="htag">Business Economics</span>
+    <span class="htag">Price Discrimination</span>
+    <span class="htag">Consumer Behaviour</span>
+    <span class="htag">Brand Strategy</span>
+  </div>
+</section>
+
+<div class="content">
+  <div class="content-grid">
+
+    <div class="sidebar reveal">
+      <span class="sidebar-label">Project Details</span>
+      <div class="sidebar-item"><strong>Type</strong>Case analysis · Written document</div>
+      <div class="sidebar-item"><strong>Course</strong>Business Economics</div>
+      <div class="sidebar-item"><strong>Focus</strong>Pricing strategy, demand elasticity, consumer segmentation</div>
+    </div>
+
+    <div class="main-content">
+
+      <div class="section-block reveal">
+        <p class="block-label">The Question</p>
+        <h2 class="block-heading">Why does Netflix charge <em>differently</em> for the same content?</h2>
+        <p class="block-body">Netflix operates in a market where the same show is watched by a student in a hostel and an executive on a flight. They value the product differently. They will pay differently. The question this case asked was simple: how does Netflix know this, and what does it do about it?</p>
+        <p class="block-body">The answer sits in the economics of <strong>price discrimination</strong> — charging different consumers different prices for a product that costs the same to deliver. Netflix has built its entire pricing architecture around this principle without most of its users ever realising it.</p>
+      </div>
+
+      <div class="section-block reveal d1">
+        <p class="block-label">The Tiers</p>
+        <h2 class="block-heading">Four plans. Four <em>types</em> of consumer.</h2>
+        <div class="tiers" style="grid-template-columns:repeat(4,1fr)">
+          <div class="tier-card">
+            <p class="tier-name">Mobile</p>
+            <p class="tier-price">₹149</p>
+            <p class="tier-desc">One screen, 480p. Price-sensitive users who watch only on phones or tablets.</p>
+          </div>
+          <div class="tier-card">
+            <p class="tier-name">Basic</p>
+            <p class="tier-price">₹199</p>
+            <p class="tier-desc">One screen, 720p HD. Solo viewers who want TV access on a budget.</p>
+          </div>
+          <div class="tier-card featured">
+            <p class="tier-name">Standard</p>
+            <p class="tier-price">₹499</p>
+            <p class="tier-desc">Two screens, 1080p Full HD. The anchor plan — designed to make Premium feel like reasonable value.</p>
+          </div>
+          <div class="tier-card">
+            <p class="tier-name">Premium</p>
+            <p class="tier-price">₹649</p>
+            <p class="tier-desc">Four screens, 4K Ultra HD. Low-elasticity households willing to pay for quality and simultaneous access.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block reveal d1">
+        <p class="block-label">Key Insights</p>
+        <h2 class="block-heading">What the pricing <em>reveals</em> about the strategy</h2>
+        <div class="insights">
+          <div class="insight-card">
+            <div class="ic-num">01</div>
+            <p class="ic-title">Demand is not uniform</p>
+            <p class="ic-body">Different user segments have fundamentally different willingness to pay. Netflix segments by device, screen count and resolution rather than identity — which is smarter and less intrusive.</p>
+          </div>
+          <div class="insight-card">
+            <div class="ic-num">02</div>
+            <p class="ic-title">The mobile plan is a market entry tool</p>
+            <p class="ic-body">At ₹149 the mobile plan is not built to maximise revenue per user. It is built to maximise market penetration in price-sensitive demographics and create long-term brand loyalty.</p>
+          </div>
+          <div class="insight-card">
+            <div class="ic-num">03</div>
+            <p class="ic-title">Anchoring drives upgrades</p>
+            <p class="ic-body">The Standard plan at ₹499 exists to make the ₹649 Premium look reasonable by comparison. This is textbook price anchoring used to extract surplus from higher-income households.</p>
+          </div>
+          <div class="insight-card">
+            <div class="ic-num">04</div>
+            <p class="ic-title">Content is the real moat</p>
+            <p class="ic-body">Pricing strategy only works if consumers believe the product is worth it. Netflix's investment in original content sustains the perceived value that justifies its premium tiers in a competitive market.</p>
+          </div>
+        </div>
+      </div>
+
+      <blockquote class="pull-quote reveal d2">
+        "The best pricing strategy is invisible to the consumer but deeply felt by the business."
+      </blockquote>
+
+      <div class="section-block reveal d2">
+        <p class="block-label">The Framework</p>
+        <h2 class="block-heading">Economics behind <em>the decision</em></h2>
+        <p class="block-body">The case applied <strong>third-degree price discrimination</strong> — where a firm charges different prices to identifiable market segments based on their demand elasticity. Students and budget users have high elasticity, meaning price changes strongly affect their behaviour. Premium households have low elasticity and will pay more without switching off.</p>
+        <p class="block-body">This is paired with <strong>profit maximisation theory</strong> — each tier is priced at a point where marginal revenue equals marginal cost for that segment, extracting maximum value from each consumer group without losing them entirely to competitors like Prime Video or Hotstar.</p>
+      </div>
+
+      <div class="takeaway reveal d3">
+        <p class="takeaway-label">Key Takeaway</p>
+        <p class="takeaway-text">Netflix is not selling subscriptions. It is selling the same content at different prices to different people who all believe they got a fair deal. That is what good pricing strategy looks like from the inside.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<nav class="page-nav">
+  <a href="shailja-portfolio-v2.html" class="pn-link">
+    <p class="pn-label">Back to</p>
+    <p class="pn-title">All Projects</p>
+  </a>
+  <a href="legacyvault.html" class="pn-link" style="text-align:right">
+    <p class="pn-label">Next Project</p>
+    <p class="pn-title">LegacyVault →</p>
+  </a>
+</nav>
+
+<script>
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+(function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+document.querySelectorAll('a,.insight-card,.tier-card').forEach(el => {
+  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+});
+const ro = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('on');ro.unobserve(e.target);} }), {threshold:.1});
+document.querySelectorAll('.reveal').forEach(r=>ro.observe(r));
+</script>
+</body>
+</html>

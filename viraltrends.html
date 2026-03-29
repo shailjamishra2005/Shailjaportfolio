@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Psychology of Viral Trends · Shailja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Instrument+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:  #050505;
+  --dark:   #0C0C0C;
+  --mid:    #161616;
+  --white:  #F0EDE8;
+  --gray:   rgba(240,237,232,0.5);
+  --dim:    rgba(240,237,232,0.15);
+  --purple: #8B5CF6;
+  --pur-dim:rgba(139,92,246,0.15);
+  --pur-glow:rgba(139,92,246,0.06);
+  --serif:  'Cormorant Garamond',Georgia,serif;
+  --sans:   'Instrument Sans',system-ui,sans-serif;
+  --ease:   cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--black);color:var(--white);
+  font-family:var(--sans);overflow-x:hidden;cursor:none;
+}
+a{color:inherit;text-decoration:none;}
+
+/* CURSOR */
+#cur{
+  position:fixed;z-index:9999;pointer-events:none;
+  width:10px;height:10px;border-radius:50%;background:var(--purple);
+  top:0;left:0;transform:translate(-50%,-50%);
+  transition:width .3s var(--ease),height .3s var(--ease);
+}
+#cur.big{width:52px;height:52px;opacity:.2;}
+#cur-ring{
+  position:fixed;z-index:9998;pointer-events:none;
+  width:36px;height:36px;border-radius:50%;
+  border:1px solid rgba(139,92,246,.4);
+  top:0;left:0;transform:translate(-50%,-50%);
+}
+
+/* BACK */
+.back{
+  position:fixed;top:28px;left:40px;z-index:200;
+  font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(240,237,232,.3);display:flex;align-items:center;gap:8px;transition:color .2s;
+}
+.back:hover{color:var(--white);}
+.back-arrow{transition:transform .3s;}
+.back:hover .back-arrow{transform:translateX(-4px);}
+
+/* GLITCH effect on title */
+@keyframes glitch1{
+  0%,95%,100%{clip-path:none;transform:none;}
+  96%{clip-path:polygon(0 20%,100% 20%,100% 40%,0 40%);transform:translateX(-4px);}
+  97%{clip-path:polygon(0 60%,100% 60%,100% 80%,0 80%);transform:translateX(4px);}
+  98%{clip-path:polygon(0 10%,100% 10%,100% 20%,0 20%);transform:translateX(-2px);}
+  99%{clip-path:none;transform:translateX(2px);}
+}
+@keyframes glitch2{
+  0%,94%,100%{opacity:0;}
+  95%,98%{opacity:.6;transform:translateX(6px);}
+  96%,99%{opacity:0;}
+  97%{opacity:.4;transform:translateX(-6px);}
+}
+
+/* SCANLINES */
+body::after{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent,transparent 2px,
+    rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px
+  );
+  pointer-events:none;z-index:9990;
+}
+
+/* NOISE */
+body::before{
+  content:'';position:fixed;inset:-200%;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+  animation:noiseShift 6s steps(1) infinite;
+}
+@keyframes noiseShift{
+  0%{transform:translate(0,0)}25%{transform:translate(-5%,5%)}50%{transform:translate(5%,-5%)}75%{transform:translate(-3%,-3%)}
+}
+
+/* purple vignette glow */
+.vignette{
+  position:fixed;inset:0;
+  background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.8) 100%);
+  pointer-events:none;z-index:1;
+}
+.pur-corner{
+  position:fixed;top:-200px;right:-200px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,92,246,.12) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+  animation:cornerPulse 5s ease-in-out infinite;
+}
+@keyframes cornerPulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.2);}}
+
+/* HERO */
+#hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 80px 80px;
+  position:relative;z-index:2;
+}
+.hero-counter{
+  position:absolute;top:50%;right:80px;transform:translateY(-50%);
+  font-family:var(--serif);font-size:clamp(10rem,18vw,16rem);
+  font-weight:300;font-style:italic;
+  color:rgba(139,92,246,.06);
+  pointer-events:none;user-select:none;
+  line-height:1;
+}
+.hero-eyebrow{
+  font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--purple);margin-bottom:20px;
+  opacity:0;animation:fadeUp .8s var(--ease) .3s forwards;
+}
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(3rem,7vw,7rem);
+  font-weight:300;line-height:.95;letter-spacing:-.02em;
+  max-width:720px;
+  opacity:0;animation:fadeUp 1s var(--ease) .5s forwards;
+  position:relative;
+}
+.hero-title em{font-style:italic;color:var(--purple);}
+.hero-title::after{
+  content:attr(data-text);
+  position:absolute;top:0;left:0;
+  font-family:var(--serif);font-size:inherit;font-weight:inherit;line-height:inherit;
+  color:var(--purple);
+  animation:glitch2 8s infinite;
+  pointer-events:none;
+}
+.hero-subtitle{
+  font-size:1.05rem;color:var(--gray);max-width:520px;line-height:1.75;margin-top:24px;
+  opacity:0;animation:fadeUp .9s var(--ease) .8s forwards;
+}
+.hero-tags{
+  display:flex;gap:10px;flex-wrap:wrap;margin-top:32px;
+  opacity:0;animation:fadeUp .8s var(--ease) 1s forwards;
+}
+.htag{
+  padding:5px 14px;border:1px solid rgba(139,92,246,.3);
+  font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(240,237,232,.45);background:var(--pur-dim);
+}
+
+/* CONTENT */
+.content{position:relative;z-index:2;padding:100px 80px;}
+.section-block{max-width:1100px;margin:0 auto 96px;}
+.block-label{
+  font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--purple);margin-bottom:18px;
+  display:flex;align-items:center;gap:10px;
+}
+.block-label::before{content:'';width:20px;height:1px;background:var(--purple);}
+.block-heading{
+  font-family:var(--serif);
+  font-size:clamp(1.8rem,3vw,2.8rem);
+  font-weight:300;line-height:1.15;margin-bottom:22px;
+}
+.block-heading em{font-style:italic;color:var(--purple);}
+.block-body{font-size:.98rem;line-height:1.9;color:var(--gray);margin-bottom:18px;}
+.block-body strong{color:var(--white);font-weight:500;}
+
+/* trigger cards */
+.triggers{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:32px;}
+.trigger-card{
+  background:var(--mid);border:1px solid rgba(240,237,232,.06);
+  padding:32px 28px;position:relative;overflow:hidden;
+  transition:border-color .3s,background .3s;
+}
+.trigger-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--purple);transform:scaleX(0);transform-origin:left;
+  transition:transform .4s var(--ease);
+}
+.trigger-card:hover{border-color:rgba(139,92,246,.3);background:var(--pur-glow);}
+.trigger-card:hover::before{transform:scaleX(1);}
+.tc-num{font-family:var(--serif);font-size:2rem;font-weight:300;color:rgba(139,92,246,.4);line-height:1;margin-bottom:12px;}
+.tc-title{font-size:.88rem;font-weight:500;color:var(--white);margin-bottom:8px;}
+.tc-body{font-size:.8rem;line-height:1.7;color:var(--gray);}
+
+/* stat blocks */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:40px;}
+.stat-block{
+  background:var(--mid);padding:28px 24px;border:1px solid rgba(240,237,232,.06);
+  text-align:center;
+}
+.sb-num{font-family:var(--serif);font-size:2.4rem;font-weight:300;color:var(--purple);line-height:1;}
+.sb-label{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gray);margin-top:6px;}
+
+/* quote with glitch */
+.dark-quote{
+  background:var(--mid);border-left:2px solid var(--purple);
+  padding:40px 40px 40px 48px;margin:48px 0;
+  position:relative;overflow:hidden;
+}
+.dark-quote::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    90deg,transparent,transparent 98px,rgba(139,92,246,.04) 98px,rgba(139,92,246,.04) 100px
+  );
+  pointer-events:none;
+}
+.dq-text{font-family:var(--serif);font-size:1.5rem;font-style:italic;font-weight:300;line-height:1.5;color:var(--white);}
+.dq-source{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(139,92,246,.6);margin-top:16px;}
+
+/* mechanics list */
+.mechanics{margin-top:32px;}
+.mechanic{
+  display:grid;grid-template-columns:auto 1fr;gap:24px;
+  padding:24px 0;border-bottom:1px solid rgba(240,237,232,.06);
+  align-items:start;
+}
+.mechanic:last-child{border-bottom:none;}
+.mech-num{
+  font-family:var(--serif);font-size:.9rem;font-style:italic;
+  color:var(--purple);padding-top:2px;min-width:28px;
+}
+.mech-content{}
+.mech-title{font-size:.92rem;font-weight:500;color:var(--white);margin-bottom:6px;}
+.mech-body{font-size:.83rem;line-height:1.72;color:var(--gray);}
+
+/* takeaway */
+.takeaway{
+  border:1px solid rgba(139,92,246,.3);
+  background:var(--pur-dim);padding:48px;
+  max-width:1100px;margin:0 auto;
+  position:relative;overflow:hidden;
+}
+.takeaway::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,var(--purple),transparent);
+}
+.takeaway-label{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple);margin-bottom:16px;}
+.takeaway-text{font-family:var(--serif);font-size:1.35rem;font-weight:300;line-height:1.65;color:rgba(240,237,232,.8);}
+
+/* page nav */
+.page-nav{
+  position:relative;z-index:2;
+  border-top:1px solid rgba(240,237,232,.06);padding:48px 80px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.pn-label{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,237,232,.25);margin-bottom:8px;}
+.pn-title{font-family:var(--serif);font-size:1.3rem;color:rgba(240,237,232,.5);transition:color .2s;}
+.pn-link:hover .pn-title{color:var(--white);}
+
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .85s var(--ease),transform .85s var(--ease);}
+.reveal.on{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+@media(max-width:900px){
+  #hero{padding:0 24px 60px;}
+  .content{padding:60px 24px;}
+  .triggers{grid-template-columns:1fr;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .takeaway{padding:32px 24px;}
+  .page-nav{padding:40px 24px;flex-direction:column;gap:28px;align-items:flex-start;}
+  .back{left:24px;}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<div class="vignette"></div>
+<div class="pur-corner"></div>
+<a href="shailja-portfolio-v2.html" class="back"><span class="back-arrow">←</span> Back</a>
+
+<section id="hero">
+  <div class="hero-counter" aria-hidden="true">∞</div>
+  <p class="hero-eyebrow">Presentation · Consumer Psychology · Content</p>
+  <h1 class="hero-title" data-text="The Dark Psychology of Viral Trends">The Dark Psychology of <em>Viral Trends</em></h1>
+  <p class="hero-subtitle">Why content spreads has less to do with quality and more to do with how it makes people feel about themselves.</p>
+  <div class="hero-tags">
+    <span class="htag">Consumer Psychology</span>
+    <span class="htag">Viral Marketing</span>
+    <span class="htag">Public Speaking</span>
+    <span class="htag">Content Strategy</span>
+  </div>
+</section>
+
+<div class="content">
+
+  <div class="section-block reveal">
+    <p class="block-label">The Premise</p>
+    <h2 class="block-heading">Nothing goes viral by <em>accident.</em></h2>
+    <p class="block-body">This presentation started with a question that most marketing discussions avoid: why do people share things that are harmful, embarrassing or clearly manipulative? The answer is not that people are foolish. It is that virality is engineered to bypass the part of the brain that asks whether something is worth sharing.</p>
+    <p class="block-body">The presentation argued that <strong>viral content is not discovered, it is designed</strong> — and that understanding the psychological mechanisms behind it is essential for anyone who wants to build brands that last rather than trends that burn.</p>
+    <div class="stats">
+      <div class="stat-block"><div class="sb-num">59%</div><div class="sb-label">Frequently share content online (Allsop et al.)</div></div>
+      <div class="stat-block"><div class="sb-num">34%</div><div class="sb-label">More shares from high-arousal emotion (UPenn)</div></div>
+      <div class="stat-block"><div class="sb-num">25%</div><div class="sb-label">Of top shared content triggers awe (BuzzSumo)</div></div>
+      <div class="stat-block"><div class="sb-num">#1</div><div class="sb-label">Anger drives more shares than any negative emotion</div></div>
+    </div>
+  </div>
+
+  <div class="section-block reveal d1">
+    <p class="block-label">The Three Triggers</p>
+    <h2 class="block-heading">What actually makes things <em>spread</em></h2>
+    <div class="triggers">
+      <div class="trigger-card">
+        <div class="tc-num">01</div>
+        <p class="tc-title">Identity signalling</p>
+        <p class="tc-body">People share content that says something about who they are or who they want to be. The share is rarely about the content. It is always about the sharer.</p>
+      </div>
+      <div class="trigger-card">
+        <div class="tc-num">02</div>
+        <p class="tc-title">Emotional arousal</p>
+        <p class="tc-body">High-arousal emotions — outrage, awe, anxiety, amusement — drive sharing behaviour. Content that makes you feel nothing goes nowhere. Content that spikes your nervous system spreads.</p>
+      </div>
+      <div class="trigger-card">
+        <div class="tc-num">03</div>
+        <p class="tc-title">Social proof compression</p>
+        <p class="tc-body">When something already has momentum, the brain interprets that as evidence of value. Virality accelerates itself because popularity signals legitimacy even when it signals nothing of the sort.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dark-quote reveal d1">
+    <p class="dq-text">Outrage travels at twice the speed of joy and four times the speed of information.</p>
+    <p class="dq-source">Core argument · The Dark Psychology of Viral Trends</p>
+  </div>
+
+  <div class="section-block reveal d2">
+    <p class="block-label">Deeper Mechanics</p>
+    <h2 class="block-heading">How platforms <em>engineer</em> the spread</h2>
+    <div class="mechanics">
+      <div class="mechanic">
+        <span class="mech-num">i.</span>
+        <div class="mech-content">
+          <p class="mech-title">Variable reward loops</p>
+          <p class="mech-body">Infinite scroll and intermittent notifications use the same psychological mechanism as slot machines. The unpredictability of reward is what creates compulsion, not the reward itself.</p>
+        </div>
+      </div>
+      <div class="mechanic">
+        <span class="mech-num">ii.</span>
+        <div class="mech-content">
+          <p class="mech-title">Social comparison architecture</p>
+          <p class="mech-body">Metrics like likes and follower counts are deliberately visible. They turn content consumption into a status game and make sharing feel like a competitive act rather than a communicative one.</p>
+        </div>
+      </div>
+      <div class="mechanic">
+        <span class="mech-num">iii.</span>
+        <div class="mech-content">
+          <p class="mech-title">Moral outrage as engagement fuel</p>
+          <p class="mech-body">Content that triggers moral outrage generates the most comments, which signals quality to algorithms, which distributes it further. The system rewards moral panic because moral panic is engaging.</p>
+        </div>
+      </div>
+      <div class="mechanic">
+        <span class="mech-num">iv.</span>
+        <div class="mech-content">
+          <p class="mech-title">In-group and out-group activation</p>
+          <p class="mech-body">Content that defines a clear us-versus-them dynamic spreads faster because it gives people a tribe to belong to and a tribe to oppose. Both sides share it for opposite reasons.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="takeaway reveal d3">
+    <p class="takeaway-label">What This Means for Marketing</p>
+    <p class="takeaway-text">Brands that chase virality by engineering outrage or exploiting psychological vulnerabilities win attention in the short term and destroy trust in the long term. The most durable brands understand these mechanisms well enough to use emotion without weaponising it. That distinction is the whole game.</p>
+  </div>
+
+</div>
+
+<nav class="page-nav">
+  <a href="legacyvault.html" class="pn-link">
+    <p class="pn-label">Previous</p>
+    <p class="pn-title">← LegacyVault</p>
+  </a>
+  <a href="brandwebsite.html" class="pn-link" style="text-align:right">
+    <p class="pn-label">Next Project</p>
+    <p class="pn-title">Brand Website →</p>
+  </a>
+</nav>
+
+<script>
+const cur=document.getElementById('cur');
+const ring=document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,.trigger-card,.mechanic').forEach(el=>{el.addEventListener('mouseenter',()=>cur.classList.add('big'));el.addEventListener('mouseleave',()=>cur.classList.remove('big'));});
+const ro=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');ro.unobserve(e.target);}}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(r=>ro.observe(r));
+</script>
+</body>
+</html>
