@@ -283,7 +283,7 @@ footer { background: var(--ink-90); padding: 28px 80px; border-top: 1px solid rg
   </div>
   <div class="projects-list reveal d1">
 
-    <div class="pcard" data-desc="A structured analysis of Netflix's tiered pricing using price discrimination, demand elasticity and profit maximisation. Delivered as a consulting-style document with a clear strategic recommendation." data-chips="Consumer Marketing,Pricing Strategy,Case Study,Business Economics" data-link="netflix.html">
+    <div class="pcard">
       <div class="pcard-top">
         <span class="pcard-num">i.</span>
         <div class="pcard-head">
@@ -292,10 +292,14 @@ footer { background: var(--ink-90); padding: 28px 80px; border-top: 1px solid rg
         </div>
         <div class="pcard-toggle">+</div>
       </div>
-      <div class="pcard-body"><div class="pcard-body-inner"><p class="pcard-desc"></p><div class="pcard-chips"></div><a class="pcard-link" href="netflix.html">Read case study →</a></div></div>
+      <div class="pcard-body"><div class="pcard-body-inner">
+        <p class="pcard-desc">A structured analysis of Netflix's tiered pricing using price discrimination, demand elasticity and profit maximisation. Delivered as a consulting-style document with a clear strategic recommendation.</p>
+        <div class="pcard-chips"><span class="chip">Consumer Marketing</span><span class="chip">Pricing Strategy</span><span class="chip">Case Study</span><span class="chip">Business Economics</span></div>
+        <a class="pcard-link" href="netflix.html">Read case study →</a>
+      </div></div>
     </div>
 
-    <div class="pcard" data-desc="A full product pitch for a platform enabling users to schedule future message deliveries to loved ones. Built the brand positioning, go-to-market strategy and launch plan from scratch." data-chips="Brand Positioning,GTM Strategy,Digital Marketing,Product Launch" data-link="legacyvault.html">
+    <div class="pcard">
       <div class="pcard-top">
         <span class="pcard-num">ii.</span>
         <div class="pcard-head">
@@ -304,10 +308,14 @@ footer { background: var(--ink-90); padding: 28px 80px; border-top: 1px solid rg
         </div>
         <div class="pcard-toggle">+</div>
       </div>
-      <div class="pcard-body"><div class="pcard-body-inner"><p class="pcard-desc"></p><div class="pcard-chips"></div><a class="pcard-link" href="legacyvault.html">Read project →</a></div></div>
+      <div class="pcard-body"><div class="pcard-body-inner">
+        <p class="pcard-desc">A full product pitch for a platform enabling users to schedule future message deliveries to loved ones. Built the brand positioning, go-to-market strategy and launch plan from scratch.</p>
+        <div class="pcard-chips"><span class="chip">Brand Positioning</span><span class="chip">GTM Strategy</span><span class="chip">Digital Marketing</span><span class="chip">Product Launch</span></div>
+        <a class="pcard-link" href="legacyvault.html">Read project →</a>
+      </div></div>
     </div>
 
-    <div class="pcard" data-desc="A public speaking presentation examining the psychological mechanics behind viral content. Covered attention hijacking, identity-based sharing and emotional contagion as core drivers of how brands spread." data-chips="Consumer Psychology,Viral Marketing,Public Speaking,Content Strategy" data-link="viraltrends.html">
+    <div class="pcard">
       <div class="pcard-top">
         <span class="pcard-num">iii.</span>
         <div class="pcard-head">
@@ -316,10 +324,12 @@ footer { background: var(--ink-90); padding: 28px 80px; border-top: 1px solid rg
         </div>
         <div class="pcard-toggle">+</div>
       </div>
-      <div class="pcard-body"><div class="pcard-body-inner"><p class="pcard-desc"></p><div class="pcard-chips"></div><a class="pcard-link" href="viraltrends.html">Read presentation →</a></div></div>
+      <div class="pcard-body"><div class="pcard-body-inner">
+        <p class="pcard-desc">A public speaking presentation examining the psychological mechanics behind viral content. Covered attention hijacking, identity-based sharing and emotional contagion as core drivers of how brands spread.</p>
+        <div class="pcard-chips"><span class="chip">Consumer Psychology</span><span class="chip">Viral Marketing</span><span class="chip">Public Speaking</span><span class="chip">Content Strategy</span></div>
+        <a class="pcard-link" href="viraltrends.html">Read presentation →</a>
+      </div></div>
     </div>
-
-
 
   </div>
 </section>
@@ -481,13 +491,9 @@ const lineObs = new IntersectionObserver(entries => {
 lineObs.observe(document.getElementById('projects'));
 
 document.querySelectorAll('.pcard').forEach(card => {
-  const desc = card.dataset.desc;
-  const chips = card.dataset.chips.split(',');
-  card.querySelector('.pcard-desc').textContent = desc;
-  const chipsEl = card.querySelector('.pcard-chips');
-  chips.forEach(c => {
-    const span = document.createElement('span');
-    span.className = 'chip'; span.textContent = c.trim();
-    chipsEl.appendChild(span);
+  card.querySelector('.pcard-top').addEventListener('click', () => {
+    const isOpen = card.classList.contains('open');
+    document.querySelectorAll('.pcard').forEach(c => c.classList.remove('open'));
+    if (!isOpen) card.classList.add('open');
   });
-  card.querySelector('.pcard-top').
+});
